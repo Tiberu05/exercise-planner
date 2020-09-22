@@ -23,13 +23,15 @@ const CreateExercise = props => {
         e.preventDefault();
 
         const exercise = {
-            username: props.username,
+            email: props.email,
             description,
             duration,
             date
         };
 
-        axios.post('http://localhost:5000/exercises/add', exercise)
+        console.log(localStorage.getItem('token'))
+
+        axios.post('http://localhost:5000/exercises/add', exercise, { headers: {'x-auth-token': localStorage.getItem('token')}})
             .then(result => console.log(result.data))
             .catch(err => console.log(err));
 
@@ -78,7 +80,7 @@ const CreateExercise = props => {
 };
 
 const mapStateToProps = state => {
-    return { username: state.auth.username };
+    return { email: state.auth.user.email };
 }
 
 export default connect(mapStateToProps, {} )(CreateExercise);

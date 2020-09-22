@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-import { signOut } from '../actions';
+import { logOut } from '../actions';
 
 import history from '../history';
 
@@ -10,7 +10,7 @@ import history from '../history';
 const Navbar = props => {
 
     const handleSignOut = () => {
-        props.signOut();
+        props.logOut();
 
         history.push('/');
     }
@@ -69,7 +69,7 @@ const Navbar = props => {
 };
 
 const mapStateToProps = state => {
-    return { isSignedIn: state.auth.isSignedIn, username: state.auth.username };
+    return { isSignedIn: state.auth.isSignedIn };
 }
 
-export default connect(mapStateToProps, { signOut })(Navbar);
+export default connect(mapStateToProps, { logOut })(Navbar);

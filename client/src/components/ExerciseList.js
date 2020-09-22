@@ -11,17 +11,20 @@ import { post } from 'jquery';
 const ExerciseList = props => {
 
     const [exercises, setExercises] = useState([]);
-
+    const [email, setEmail] = useState('');
     const {reload, setReload} = useState('');
 
     useEffect(() => {
 
-        axios.get(`http://localhost:5000/exercises/${props.username}`)
-            .then(results => {
-                setExercises(results.data);
-            })
-            .catch(err => console.log(err));
-    }, [exercises])
+        axios.get(`http://localhost:5000/exercises/${props.email}`)
+        .then(results => {
+            setExercises(results.data);
+        })
+        .catch(err => console.log(err));
+        
+
+
+    }, [exercises]);
 
 
     const deleteExercise = (id) => {
@@ -35,7 +38,7 @@ const ExerciseList = props => {
     }
 
     const renderButtons = user => {
-        if (user.username === props.username) {
+        if (user.email === props.email) {
             return (
                 <td>
                     <Link to={`exercises/edit/${user._id}`}>
@@ -57,7 +60,7 @@ const ExerciseList = props => {
 
         console.log(toggleBetween);
 
-        axios.post(`http://localhost:5000/exercises/update/${el._id}`, { ...el, checked: toggleBetween })
+        axios.post(`http://localhost:5000/exercises/update/${el._id}`, { ...el, checked: toggleBetween }, { headers: {'x-auth-token': localStorage.getItem('token')}})
             .then(result => console.log(result))
             .catch(err => console.log(err))
     }
@@ -65,9 +68,9 @@ const ExerciseList = props => {
 
     const renderChecked = el => {
         if (!el.checked) {
-            return <i onClick={() => toggleChecked(el)} class="thumbs up outline icon"></i>
+            return <i onClick={() => toggleChecked(el)} className="thumbs up outline icon"></i>
         } else {
-            return <i onClick={() => toggleChecked(el)} class="thumbs up icon green"></i>
+            return <i onClick={() => toggleChecked(el)} className="thumbs up icon green"></i>
         }
     }
 
@@ -81,7 +84,7 @@ const ExerciseList = props => {
                 const classToggle = el.checked ? 'checked' : '';
                 return (
                     <tr className={`${classToggle}`} key={el._id}>
-                        <td>{el.username.slice(0, 1).toUpperCase() + el.username.slice(1, el.username.length).toLowerCase()}</td>
+                        <td>{el.email}</td>
                         <td>{el.description.slice(0, 1).toUpperCase() + el.description.slice(1, el.description.length).toLowerCase()}</td>
                         <td>{el.duration}</td>
                         <td>{el.date.substring(0, 10)}</td>
@@ -154,7 +157,7 @@ const ExerciseList = props => {
 };
 
 const mapStateToProps = state => {
-    return { isSignedIn: state.auth.isSignedIn, username: state.auth.username };
+    return { isSignedIn: state.auth.isSignedIn, email: state.auth.user.email, token: state.auth.token };
 }
 
 export default connect(mapStateToProps, {} )(ExerciseList);

@@ -5,7 +5,7 @@ const HomePage = props => {
 
     const renderHome = () => {
         if (props.isSignedIn) {
-            return <h2>Welcome, {props.username}</h2>
+            return <h2>Welcome, {props.name}</h2>
         } else {
             return <h2>Welcome to React App</h2>
         }
@@ -20,7 +20,7 @@ const HomePage = props => {
 };
 
 const mapStateToProps = state => {
-    return { isSignedIn: state.auth.isSignedIn, username: state.auth.username };
+    return { isSignedIn: state.auth.isSignedIn, name: state.auth.user.name };
 };
 
 export default connect(mapStateToProps, {})(HomePage);

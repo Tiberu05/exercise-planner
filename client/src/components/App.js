@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import history from '../history';
 
+import { connect } from 'react-redux';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "jquery/dist/jquery.min.js";
@@ -15,9 +16,13 @@ import EditExercise from './EditExercise';
 import ExerciseList from './ExerciseList';
 import LoginForm from './LoginForm';
 
+import { loadUser } from '../actions';
+
 const App = props => {
 
-    
+    useEffect(() => {
+        props.loadUser();
+    })
 
     return(
         <Router history={history}>
@@ -39,4 +44,8 @@ const App = props => {
     );
 };
 
-export default App;
+const mapStateToProps = state => {
+    return {};
+}
+
+export default connect(mapStateToProps, { loadUser })(App);

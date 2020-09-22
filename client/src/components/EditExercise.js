@@ -27,7 +27,7 @@ const EditExercise = props => {
         console.log(exercise);
 
         const newExercise = {
-            username: exercise.username,
+            email: exercise.email,
             description: exercise.description,
             duration: exercise.duration,
             date: exercise.date,

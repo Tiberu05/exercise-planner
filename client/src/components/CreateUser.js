@@ -1,29 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import { connect } from 'react-redux';
+
+import { createUser, clearErrors } from '../actions';
+
 const CreateUser = props => {
 
-    const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [message, setMessage] = useState(null);
 
 
     const onSubmit = e => {
         e.preventDefault();
 
-        const user = {
-            username,
-            email,
-            password
-        };
+        props.createUser(name, email, password);
 
-        axios.post('http://localhost:5000/users/add', user)
-            .then(result => console.log(result.data))
-            .catch(err => console.log(err));
-
-
-
-        window.location = '/';
     }
 
 
@@ -33,8 +27,8 @@ const CreateUser = props => {
             <form className='exercise-form' onSubmit={onSubmit}>
 
                 <div className='form-group'>
-                    <label for='username'>Username</label>
-                    <input className="form-control" type='text' name='username' autoComplete='off' value={username} onChange={e => setUsername(e.target.value)} />
+                    <label for='name'>Name</label>
+                    <input className="form-control" type='text' name='name' autoComplete='off' value={name} onChange={e => setName(e.target.value)} />
                 </div>
 
                 <div className='form-group'>
@@ -54,4 +48,8 @@ const CreateUser = props => {
     )
 };
 
-export default CreateUser;
+const mapStateToProps = state => {
+    return { isSignedIn: state.auth.isSignedIn };
+}
+
+export default connect(mapStateToProps, { createUser, clearErrors })(CreateUser);
